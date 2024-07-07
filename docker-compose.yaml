@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+    userdb:
+      container_name: userdb
+      image: postgres
+      ports:
+      - "5436:5432"
+      environment:
+        POSTGRES_USER: abdulkadir
+        POSTGRES_PASSWORD: 123456
+        POSTGRES_DB: userdb
+      volumes:
+      - userdb:/var/lib/postgresql/data
+      networks:
+      - realestate
+    pgadmin:
+      container_name: pgadmin
+      image: dpage/pgadmin4
+      environment:
+       PGADMIN_DEFAULT_EMAIL: admin@example.com
+       PGADMIN_DEFAULT_PASSWORD: admin
+      ports:
+      - "5050:80"
+      depends_on:
+      - userdb
+volumes:
+  userdb:
+
+networks:
+  realestate:
+    driver: bridge
