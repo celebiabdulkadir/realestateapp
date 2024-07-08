@@ -2,6 +2,7 @@ package com.abdulkadir.user.service;
 
 import com.abdulkadir.user.dto.request.UserRequestDTO;
 import com.abdulkadir.user.dto.response.UserResponseDTO;
+import com.abdulkadir.user.exception.EntityAlreadyExistsException;
 import com.abdulkadir.user.exception.EntityNotFoundException;
 import com.abdulkadir.user.mapper.UserMapper;
 import com.abdulkadir.user.model.User;
@@ -34,7 +35,17 @@ public class UserService {
         );
     }
 
+
+
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+        // Assuming email is the unique identifier. Adjust according to your user model.
+        String email = userRequestDTO.getEmail();
+        boolean userExists = userRepository.findByEmail(email).isPresent();
+
+        if (userExists) {
+            throw new EntityAlreadyExistsException("User already exists with email: " + email);
+        }
+
         return userMapper.toUserResponseDTO(userRepository.save(userMapper.toUser(userRequestDTO)));
     }
 
