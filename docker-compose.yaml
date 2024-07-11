@@ -14,18 +14,22 @@ services:
       - userdb:/var/lib/postgresql/data
       networks:
       - realestate
-    pgadmin:
-      container_name: pgadmin
-      image: dpage/pgadmin4
-      environment:
-       PGADMIN_DEFAULT_EMAIL: admin@example.com
-       PGADMIN_DEFAULT_PASSWORD: admin
-      ports:
-      - "5050:80"
-      depends_on:
-      - userdb
+    advert:
+        container_name: advert
+        image: postgres
+        ports:
+        - "5437:5432"
+        environment:
+            POSTGRES_USER: abdulkadir
+            POSTGRES_PASSWORD: 123456
+            POSTGRES_DB: advert
+        volumes:
+        - advert:/var/lib/postgresql/data
+        networks:
+        - realestate
 volumes:
   userdb:
+  advert:
 
 networks:
   realestate:
