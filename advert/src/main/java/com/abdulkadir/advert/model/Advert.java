@@ -3,6 +3,7 @@ package com.abdulkadir.advert.model;
 import com.abdulkadir.advert.config.JpaAuditingConfig;
 import com.abdulkadir.advert.model.enums.AdvertStatus;
 import com.abdulkadir.advert.model.enums.AdvertType;
+import com.abdulkadir.advert.model.enums.Heating;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -52,7 +53,7 @@ public class Advert {
     private Number totalFloor;
 
     @Column(name = "heating")
-    private String heating;
+    private Heating heating;
 
     @Column(name = "balcony")
     private Boolean balcony;

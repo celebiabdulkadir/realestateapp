@@ -2,6 +2,7 @@ package com.abdulkadir.advert.dto.request;
 
 import com.abdulkadir.advert.model.enums.AdvertStatus;
 import com.abdulkadir.advert.model.enums.AdvertType;
+import com.abdulkadir.advert.model.enums.Heating;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -43,9 +44,9 @@ public class AdvertRequestDTO {
     @NotNull(message = "Total floor cannot be null")
     private Number totalFloor;
 
-    @NotEmpty(message = "Heating cannot be empty")
+
     @NotNull(message = "Heating cannot be null")
-    private String heating;
+    private Heating heating;
 
     @NotNull(message = "Balcony cannot be null")
     private Boolean balcony;
@@ -68,7 +69,6 @@ public class AdvertRequestDTO {
     @NotNull(message = "Swap cannot be null")
     private Boolean swap;
 
-    @NotEmpty(message = "Advert Type cannot be empty")
     @NotNull(message = "Advert Type cannot be null")
     private AdvertType advertType; // For Sale or For Rent
 
