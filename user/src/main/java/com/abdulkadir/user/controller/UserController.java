@@ -27,6 +27,12 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping("/exists/{id}")
+    public Boolean existsById(@PathVariable Long id) {
+        return userService.existsById(id);
+    }
+
+
     @PostMapping
     public UserResponseDTO createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         return userService.createUser(userRequestDTO);

@@ -22,6 +22,11 @@ public class AdvertController {
         return advertService.getAll();
     }
 
+    @GetMapping("/{userId}/adverts")
+    public int getAllByUserId(@PathVariable Long id) {
+        return advertService.getAllByUserId(id).size();
+    }
+
     @GetMapping("/{id}")
     public AdvertResponseDTO getById(@PathVariable Long id) {
         return advertService.getById(id);

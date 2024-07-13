@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface AdvertRepository extends JpaRepository<Advert, Long> {
     Optional<Advert> findAdvertByTitle(String title);
+    Optional<Advert> findByUserId(Long userId);
 
 }

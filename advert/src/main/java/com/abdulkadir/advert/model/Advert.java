@@ -1,6 +1,7 @@
 package com.abdulkadir.advert.model;
 
 import com.abdulkadir.advert.config.JpaAuditingConfig;
+import com.abdulkadir.advert.model.converters.AdvertTypeConverter;
 import com.abdulkadir.advert.model.enums.AdvertStatus;
 import com.abdulkadir.advert.model.enums.AdvertType;
 import com.abdulkadir.advert.model.enums.Heating;
@@ -26,7 +27,7 @@ public class Advert {
     private Long id;
 
     @Column(name = "user_id")
-    private Number userId;
+    private Long userId;
 
     @Column(name = "title")
     private String title;
@@ -58,6 +59,7 @@ public class Advert {
     @Column(name = "balcony")
     private Boolean balcony;
 
+
     @Column(name = "elevator")
     private Boolean elevator;
 
@@ -76,6 +78,7 @@ public class Advert {
     @Column(name = "swap")
     private Boolean swap;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "advert_type") // For Sale or For Rent
     private AdvertType advertType;
 
@@ -88,6 +91,19 @@ public class Advert {
     private LocalDateTime updateDate;
 
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     @Column(name = "advert_status")
     private AdvertStatus advertStatus = AdvertStatus.IN_REVIEW;
+
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createDate = now;
+        this.updateDate = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updateDate = LocalDateTime.now();
+    }
 }

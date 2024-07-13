@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AdvertResponseDTO {
     private Long id;
-    private Number userId;
+    private Long userId;
     private String title;
     private String description;
     private String address;

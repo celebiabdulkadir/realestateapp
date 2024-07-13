@@ -60,27 +60,24 @@ public class AdvertMapper {
     }
 
     public Advert updateAdvertFields(Advert existingAdvert, AdvertRequestDTO advertRequestDTO) {
-        return Advert.builder()
-                .title(advertRequestDTO.getTitle())
-                .description(advertRequestDTO.getDescription())
-                .address(advertRequestDTO.getAddress())
-                .price(advertRequestDTO.getPrice())
-                .area(advertRequestDTO.getArea())
-                .room(advertRequestDTO.getRoom())
-                .floor(advertRequestDTO.getFloor())
-                .totalFloor(advertRequestDTO.getTotalFloor())
-                .heating(advertRequestDTO.getHeating())
-                .balcony(advertRequestDTO.getBalcony())
-                .elevator(advertRequestDTO.getElevator())
-                .fromHomeOwner(advertRequestDTO.getFromHomeOwner())
-                .fromAgency(advertRequestDTO.getFromAgency())
-                .furnished(advertRequestDTO.getFurnished())
-                .credit(advertRequestDTO.getCredit())
-                .swap(advertRequestDTO.getSwap())
-                .advertType(advertRequestDTO.getAdvertType())
-                .advertStatus(existingAdvert.getAdvertStatus()) // Do not update status
-                .build();
-
-
+        existingAdvert.setTitle(advertRequestDTO.getTitle());
+        existingAdvert.setDescription(advertRequestDTO.getDescription());
+        existingAdvert.setAddress(advertRequestDTO.getAddress());
+        existingAdvert.setPrice(advertRequestDTO.getPrice());
+        existingAdvert.setArea(advertRequestDTO.getArea());
+        existingAdvert.setRoom(advertRequestDTO.getRoom());
+        existingAdvert.setFloor(advertRequestDTO.getFloor());
+        existingAdvert.setTotalFloor(advertRequestDTO.getTotalFloor());
+        existingAdvert.setHeating(advertRequestDTO.getHeating());
+        existingAdvert.setBalcony(advertRequestDTO.getBalcony());
+        existingAdvert.setElevator(advertRequestDTO.getElevator());
+        existingAdvert.setFromHomeOwner(advertRequestDTO.getFromHomeOwner());
+        existingAdvert.setFromAgency(advertRequestDTO.getFromAgency());
+        existingAdvert.setFurnished(advertRequestDTO.getFurnished());
+        existingAdvert.setCredit(advertRequestDTO.getCredit());
+        existingAdvert.setSwap(advertRequestDTO.getSwap());
+        existingAdvert.setAdvertType(advertRequestDTO.getAdvertType());
+        // Note: The advert status is not updated as per the original method's comment
+        return existingAdvert;
     }
 }

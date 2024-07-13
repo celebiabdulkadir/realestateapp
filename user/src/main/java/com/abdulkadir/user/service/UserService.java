@@ -34,6 +34,9 @@ public class UserService {
                 () -> new EntityNotFoundException("User not found with id: " + id)
         );
     }
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
 
 
 

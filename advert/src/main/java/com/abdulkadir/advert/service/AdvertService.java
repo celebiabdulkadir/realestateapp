@@ -1,5 +1,7 @@
 package com.abdulkadir.advert.service;
 
+import com.abdulkadir.advert.client.OrderClient;
+import com.abdulkadir.advert.client.UserClient;
 import com.abdulkadir.advert.dto.request.AdvertRequestDTO;
 import com.abdulkadir.advert.dto.response.AdvertResponseDTO;
 import com.abdulkadir.advert.exception.EntityAlreadyExistsException;
@@ -20,6 +22,8 @@ public class AdvertService {
 
     private final AdvertMapper advertMapper;
     private final AdvertRepository advertRepository;
+    private final UserClient userClient;
+    private final OrderClient orderClient;
 
     public List<AdvertResponseDTO> getAll() {
         return advertRepository
@@ -35,16 +39,35 @@ public class AdvertService {
         );
     }
 
+    public List<AdvertResponseDTO> getAllByUserId(Long id) {
+        return advertRepository.findByUserId(id)
+                .stream()
+                .map(advertMapper::toAdvertResponseDTO)
+                .collect(Collectors.toList());
+    }
+
 
 
     public AdvertResponseDTO create(AdvertRequestDTO advertRequestDTO) {
         // Assuming email is the unique identifier. Adjust according to your user model.
+
+        if (!userClient.existsById(advertRequestDTO.getUserId())) {
+            throw new EntityNotFoundException("User not found with id: " + advertRequestDTO.getUserId());
+        }
+
+
+        if (orderClient.getAvailableAdvertRights(advertRequestDTO.getUserId()) <= 0) {
+            throw new EntityNotFoundException("User does not have available advert rights");
+        }
+
         String title = advertRequestDTO.getTitle();
         boolean userExists = advertRepository.findAdvertByTitle(title).isPresent();
 
         if (userExists) {
             throw new EntityAlreadyExistsException("Advert already exists with title: " + title);
         }
+
+
 
         return advertMapper.toAdvertResponseDTO(advertRepository.save(advertMapper.toAdvert(advertRequestDTO)));
     }

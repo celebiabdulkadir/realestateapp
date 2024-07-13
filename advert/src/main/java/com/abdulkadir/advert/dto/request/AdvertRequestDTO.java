@@ -17,7 +17,7 @@ import lombok.*;
 public class AdvertRequestDTO {
 
     @NotNull(message = "UserId cannot be null")
-    private Number userId;
+    private Long userId;
 
     @NotEmpty(message = "Title should not be empty")
     private String title;

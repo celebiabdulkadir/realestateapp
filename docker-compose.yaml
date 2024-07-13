@@ -27,9 +27,23 @@ services:
         - advert:/var/lib/postgresql/data
         networks:
         - realestate
+    orderdb:
+        container_name: orderdb
+        image: postgres
+        ports:
+        - "5438:5432"
+        environment:
+          POSTGRES_USER: abdulkadir
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: orderdb
+        volumes:
+        - orderdb:/var/lib/postgresql/data
+        networks:
+        - realestate
 volumes:
   userdb:
   advert:
+  orderdb:
 
 networks:
   realestate:
