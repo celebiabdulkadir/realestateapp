@@ -80,12 +80,20 @@ public class Order {
         this.orderDate = now;
         this.updateDate = now;
         calculateAdvertCount();
+        calculateTotalPrice();
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.updateDate = LocalDateTime.now();
         calculateAdvertCount();
+        calculateTotalPrice();
+    }
+
+    private  void calculateTotalPrice() {
+        if (packagePrice != null && packageQuantity != null) {
+            this.totalPrice = packagePrice.intValue() * packageQuantity.intValue();
+        }
     }
 
     private void calculateAdvertCount() {

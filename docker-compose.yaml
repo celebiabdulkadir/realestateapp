@@ -40,10 +40,24 @@ services:
         - orderdb:/var/lib/postgresql/data
         networks:
         - realestate
+    paymentdb:
+        container_name: paymentdb
+        image: postgres
+        ports:
+        - "5439:5432"
+        environment:
+          POSTGRES_USER: abdulkadir
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: paymentdb
+        volumes:
+        - paymentdb:/var/lib/postgresql/data
+        networks:
+        - realestate
 volumes:
   userdb:
   advert:
   orderdb:
+  paymentdb:
 
 networks:
   realestate:

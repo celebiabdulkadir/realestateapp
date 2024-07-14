@@ -27,12 +27,6 @@ public class OrderRequestDTO {
     @NotNull(message = "Package advert quantity cannot be null")
     private Number packageAdvertQuantity;
 
-    @NotNull(message = "Total price cannot be null")
-    private Number totalPrice;
-
-    @NotNull(message = "Expiry date cannot be null")
-    private LocalDateTime expiryDate;
-
 
 
     // Assuming orderDate is set at the time of order creation and not provided by the client

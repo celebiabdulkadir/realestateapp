@@ -4,8 +4,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(value = "advert", url = "localhost:8082")
-public interface AdvertClient {
-    @GetMapping("/adverts/{id}")
-    int getAdvertCount(@PathVariable("id") Long id);
+@FeignClient(value = "user", url = "localhost:8081")
+
+public interface UserClient {
+    @GetMapping("/exists/{id}")
+    Boolean existsById(@PathVariable Long id);
 }

@@ -63,11 +63,11 @@ public class AdvertService {
         String title = advertRequestDTO.getTitle();
         boolean userExists = advertRepository.findAdvertByTitle(title).isPresent();
 
-        if (userExists) {
+
+        boolean titleExists = advertRepository.findAdvertByTitle(title).isPresent();
+        if (titleExists) {
             throw new EntityAlreadyExistsException("Advert already exists with title: " + title);
         }
-
-
 
         return advertMapper.toAdvertResponseDTO(advertRepository.save(advertMapper.toAdvert(advertRequestDTO)));
     }

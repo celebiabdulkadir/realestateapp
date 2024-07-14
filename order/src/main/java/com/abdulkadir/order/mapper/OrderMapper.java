@@ -36,8 +36,7 @@ public class OrderMapper {
                 .packageQuantity(orderRequestDTO.getPackageQuantity())
                 .packagePrice(orderRequestDTO.getPackagePrice())
                 .packageAdvertQuantity(orderRequestDTO.getPackageAdvertQuantity())
-                .totalPrice(orderRequestDTO.getTotalPrice())
-                .expiryDate(orderRequestDTO.getExpiryDate())
+
                 // Fields like paymentAmount, paymentId, and paymentDate are set after the payment process
                 .build();
     }
@@ -47,8 +46,7 @@ public class OrderMapper {
         existingOrder.setPackageQuantity(orderRequestDTO.getPackageQuantity());
         existingOrder.setPackagePrice(orderRequestDTO.getPackagePrice());
         existingOrder.setPackageAdvertQuantity(orderRequestDTO.getPackageAdvertQuantity());
-        existingOrder.setTotalPrice(orderRequestDTO.getTotalPrice());
-        existingOrder.setExpiryDate(orderRequestDTO.getExpiryDate());
+
         // Note: We do not update userId, orderDate, orderStatus, and paymentStatus as these fields are typically not changed after order creation
         return existingOrder;
     }
