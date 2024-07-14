@@ -8,22 +8,35 @@ import com.abdulkadir.advert.exception.EntityAlreadyExistsException;
 import com.abdulkadir.advert.exception.EntityNotFoundException;
 import com.abdulkadir.advert.mapper.AdvertMapper;
 import com.abdulkadir.advert.model.Advert;
+import com.abdulkadir.advert.model.enums.AdvertStatus;
+import com.abdulkadir.advert.producer.StatusChangeProducer;
 import com.abdulkadir.advert.repository.AdvertRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AdvertService {
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private TopicExchange exchange;
+
     private final AdvertMapper advertMapper;
     private final AdvertRepository advertRepository;
     private final UserClient userClient;
     private final OrderClient orderClient;
+    private final StatusChangeProducer statusChangeProducer;
 
     public List<AdvertResponseDTO> getAll() {
         return advertRepository
@@ -31,6 +44,14 @@ public class AdvertService {
                 .stream()
                 .map(advertMapper::toAdvertResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public void changeAdvertStatus(Long advertId, AdvertStatus status) {
+        Map<String, Object> actionMap = new HashMap<>();
+        status = AdvertStatus.ACTIVE;
+        actionMap.put("advertId", advertId);
+        actionMap.put("status", status);
+        rabbitTemplate.convertAndSend(exchange.getName(), "advert.status.change", actionMap);
     }
 
     public AdvertResponseDTO getById(Long id) {
@@ -47,27 +68,35 @@ public class AdvertService {
 
 
     public AdvertResponseDTO create(AdvertRequestDTO advertRequestDTO) {
-        // Assuming email is the unique identifier. Adjust according to your user model.
-
+        // Check if the user exists.
         if (!userClient.existsById(advertRequestDTO.getUserId())) {
             throw new EntityNotFoundException("User not found with id: " + advertRequestDTO.getUserId());
         }
 
-
+        // Check if the user has available advert rights.
         if (orderClient.getAvailableAdvertRights(advertRequestDTO.getUserId()) <= 0) {
             throw new EntityNotFoundException("User does not have available advert rights");
         }
 
+        // Check if the title already exists.
         String title = advertRequestDTO.getTitle();
-        boolean userExists = advertRepository.findAdvertByTitle(title).isPresent();
-
-
         boolean titleExists = advertRepository.findAdvertByTitle(title).isPresent();
         if (titleExists) {
             throw new EntityAlreadyExistsException("Advert already exists with title: " + title);
         }
 
-        return advertMapper.toAdvertResponseDTO(advertRepository.save(advertMapper.toAdvert(advertRequestDTO)));
+        // Save the advert entity.
+        Advert savedAdvert = advertRepository.save(advertMapper.toAdvert(advertRequestDTO));
+
+        // Send the status change message after saving the advert.
+        // Assuming the status change is related to the creation of the advert,
+        // and ACTIVE status is set after creation.
+        // You might need to adjust the status based on your application logic.
+
+        statusChangeProducer.sendStatusChange(AdvertStatus.valueOf(AdvertStatus.ACTIVE.toString()));
+
+        // Convert the saved advert entity to AdvertResponseDTO and return it.
+        return advertMapper.toAdvertResponseDTO(savedAdvert);
     }
 
     public AdvertResponseDTO update(Long id, AdvertRequestDTO advertRequestDTO) {

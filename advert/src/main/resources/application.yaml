@@ -4,6 +4,13 @@ spring:
     username: abdulkadir
     password: 123456
     driver-class-name: org.postgresql.Driver
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: 123456
+
+
 
 
   security:
@@ -35,4 +42,9 @@ logging:
         orm:
           jdbc:
             bind: TRACE
+# Custom RabbitMQ settings
+status:
+  queue: advertStatusQueue
+  exchange: advert-exchange
+  routingKey: advert.status.#
 

@@ -53,11 +53,23 @@ services:
         - paymentdb:/var/lib/postgresql/data
         networks:
         - realestate
+    rabbitmq-advert:
+      container_name: rabbitmq-advert
+      image: rabbitmq:3-management
+      ports:
+        - "5672:5672"
+        - "15672:15672"
+      networks:
+        - realestate
+      environment:
+        RABBITMQ_DEFAULT_USER: admin
+        RABBITMQ_DEFAULT_PASS: 123456
 volumes:
   userdb:
   advert:
   orderdb:
   paymentdb:
+  rabbitmq-advert:
 
 networks:
   realestate:
