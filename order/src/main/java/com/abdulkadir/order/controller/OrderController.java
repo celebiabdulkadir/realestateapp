@@ -29,7 +29,7 @@ public class OrderController {
     }
 
     @GetMapping("/availableAdvertRights/{id}")
-    public int getAvailableAdvertRights(@PathVariable("id") Long userId) {
+    public long getAvailableAdvertRights(@PathVariable("id") Long userId) {
         return orderService.getAvailableAdvertRights(userId);
     }
 

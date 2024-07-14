@@ -39,11 +39,9 @@ public class AdvertService {
         );
     }
 
-    public List<AdvertResponseDTO> getAllByUserId(Long id) {
-        return advertRepository.findByUserId(id)
-                .stream()
-                .map(advertMapper::toAdvertResponseDTO)
-                .collect(Collectors.toList());
+    public long getAllByUserId(Long userId) {
+
+        return advertRepository.findByUserId(userId).stream().count();
     }
 
 

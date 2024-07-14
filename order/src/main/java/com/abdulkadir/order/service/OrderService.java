@@ -92,18 +92,18 @@ public class OrderService {
         }).orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + id));
     }
 
-    public int getAvailableAdvertRights(Long userId) {
+    public long getAvailableAdvertRights(Long userId) {
         List<Order> validOrders = orderRepository.findByUserIdAndExpiryDateAfter(userId, LocalDateTime.now());
-        int totalAdvertRights = validOrders.stream()
+        long totalAdvertRights = validOrders.stream()
                 .mapToInt(Order::getAdvertCount)
                 .sum();
 
-        int usedAdvertRights = calculateUsedAdvertRights(userId);
+        long usedAdvertRights = calculateUsedAdvertRights(userId);
 
         return totalAdvertRights - usedAdvertRights;
     }
 
-    private int calculateUsedAdvertRights(Long userId) {
+    private long calculateUsedAdvertRights(Long userId) {
         return advertClient.getAdvertCount(userId);
     }
 

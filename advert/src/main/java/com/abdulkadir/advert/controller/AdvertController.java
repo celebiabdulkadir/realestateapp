@@ -23,8 +23,8 @@ public class AdvertController {
     }
 
     @GetMapping("/adverts/{id}")
-    public int getAllByUserId(@PathVariable Long id) {
-        return advertService.getAllByUserId(id).size();
+    public long getAllByUserId(@PathVariable("id") Long userId) {
+        return advertService.getAllByUserId(userId);
     }
 
     @GetMapping("/{id}")
