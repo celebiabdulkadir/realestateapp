@@ -2,6 +2,7 @@ package com.abdulkadir.advert.config;
 
 
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,21 +14,21 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-@Data
 public class RabbitMQConfig {
-
 
     @Value(value = "${status.queue}")
     private String statusQueue;
 
+    @Getter
     @Value(value = "${status.exchange}")
     private String exchange;
 
+    @Getter
     @Value(value = "${status.routingKey}")
     private String routingKey;
 
     @Bean
-    public Queue advertStatusQueue() {
+    public Queue statusQueue() {
         return new Queue(statusQueue, false);
     }
 
@@ -37,11 +38,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding binding(Queue advertStatusQueue, TopicExchange exchange) {
+    public Binding binding(Queue statusQueue, TopicExchange exchange) {
         return BindingBuilder
-                .bind(advertStatusQueue).
-                to(exchange).
-                with(routingKey);
+                .bind(statusQueue)
+                .to(exchange)
+                .with(routingKey);
     }
 
     @Bean
@@ -55,4 +56,6 @@ public class RabbitMQConfig {
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
         return rabbitTemplate;
     }
+
+
 }

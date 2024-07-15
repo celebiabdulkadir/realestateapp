@@ -46,14 +46,6 @@ public class AdvertService {
                 .collect(Collectors.toList());
     }
 
-    public void changeAdvertStatus(Long advertId, AdvertStatus status) {
-        Map<String, Object> actionMap = new HashMap<>();
-        status = AdvertStatus.ACTIVE;
-        actionMap.put("advertId", advertId);
-        actionMap.put("status", status);
-        rabbitTemplate.convertAndSend(exchange.getName(), "advert.status.change", actionMap);
-    }
-
     public AdvertResponseDTO getById(Long id) {
         return advertRepository.findById(id).map(advertMapper::toAdvertResponseDTO).orElseThrow(
                 () -> new EntityNotFoundException("Advert not found with id: " + id)
@@ -93,8 +85,7 @@ public class AdvertService {
         // and ACTIVE status is set after creation.
         // You might need to adjust the status based on your application logic.
 
-        statusChangeProducer.sendStatusChange(AdvertStatus.valueOf(AdvertStatus.ACTIVE.toString()));
-
+        statusChangeProducer.sendStatusChange(savedAdvert.getId(), AdvertStatus.ACTIVE);
         // Convert the saved advert entity to AdvertResponseDTO and return it.
         return advertMapper.toAdvertResponseDTO(savedAdvert);
     }
