@@ -10,6 +10,23 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - authorization
+              - content-type
+              - x-auth-token
+            exposedHeaders:
+              - x-auth-token
       routes:
         - id: user_route
           uri: lb://user

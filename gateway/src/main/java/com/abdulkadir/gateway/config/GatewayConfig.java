@@ -22,4 +22,5 @@ public class GatewayConfig {
                         .uri("lb://advert"))
                 .build();
     }
+
 }
