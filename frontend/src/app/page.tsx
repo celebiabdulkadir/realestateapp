@@ -1,30 +1,22 @@
-"use client";
+import { cookies } from "next/headers";
+import Button from "@/components/Button";
+import { getAllAdverts } from "./lib/getAllAdverts";
+import AdvertList from "@/components/Advertlist";
 
-import React, { useEffect } from "react";
+export default async function Home() {
+  const adverts = await getAllAdverts();
 
-export default function Home() {
-  useEffect(() => {
-    fetchSomething();
-  }, []);
+  const jsonedadverts = await (adverts as Response).json();
+  console.log("adverts", adverts);
+  const cookieStore = cookies();
+  const token = cookieStore.get("token");
 
-  const fetchSomething = async () => {
-    fetch("http://localhost:8080/auth/auth/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: "abdulkadir", // replace 'your-username' with the actual username
-        password: "Aa123456", // replace 'your-password' with the actual password
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error("Error:", error));
-  };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col  items-center  p-24">
       <div>Home page</div>
+      <div className="h-full">
+        <AdvertList adverts={jsonedadverts} />
+      </div>
     </main>
   );
 }

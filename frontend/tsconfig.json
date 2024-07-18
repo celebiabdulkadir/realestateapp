@@ -10,7 +10,9 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "downlevelIteration": true,
     "jsx": "preserve",
+    "target": "es2015",
     "incremental": true,
     "plugins": [
       {

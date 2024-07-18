@@ -6,11 +6,13 @@ import { useFormState, useFormStatus } from "react-dom";
 export default function Page() {
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
+  console.log("errorMessage", errorMessage);
+
   return (
     <form action={dispatch}>
-      <input type="email" name="email" placeholder="Email" required />
+      <input type="text" name="email" placeholder="Email" required />
       <input type="password" name="password" placeholder="Password" required />
-      <div>{errorMessage && <p>{errorMessage}</p>}</div>
+
       <LoginButton />
     </form>
   );
@@ -19,7 +21,7 @@ export default function Page() {
 function LoginButton() {
   const { pending } = useFormStatus();
 
-  const handleClick = (event) => {
+  const handleClick = (event: { preventDefault: () => void }) => {
     if (pending) {
       event.preventDefault();
     }
