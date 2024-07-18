@@ -7,10 +7,12 @@ import com.abdulkadir.order.client.dto.PaymentClientRequestDTO;
 import com.abdulkadir.order.client.dto.PaymentClientResponseDTO;
 import com.abdulkadir.order.dto.request.OrderRequestDTO;
 import com.abdulkadir.order.dto.response.OrderResponseDTO;
-import com.abdulkadir.order.enums.PaymentStatus;
+import com.abdulkadir.order.model.enums.PaymentStatus;
 import com.abdulkadir.order.exception.EntityNotFoundException;
 import com.abdulkadir.order.mapper.OrderMapper;
 import com.abdulkadir.order.model.Order;
+import com.abdulkadir.order.model.enums.OrderStatus;
+import com.abdulkadir.order.producer.StatusChangeProducer;
 import com.abdulkadir.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,7 @@ public class OrderService {
     private final AdvertClient advertClient;
     private final PaymentClient paymentClient;
     private final UserClient userClient;
+    private final StatusChangeProducer statusChangeProducer;
 
     public List<OrderResponseDTO> getAll() {
         return orderRepository
@@ -80,6 +83,8 @@ public class OrderService {
 
         // Step 5: Save the updated order
         Order savedOrder = orderRepository.save(newOrder);
+        statusChangeProducer.sendStatusChange(savedOrder.getId(), OrderStatus.DELIVERED);
+
 
         return orderMapper.toOrderResponseDTO(savedOrder);
     }

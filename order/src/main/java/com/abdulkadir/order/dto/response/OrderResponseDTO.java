@@ -1,7 +1,7 @@
 package com.abdulkadir.order.dto.response;
 
-import com.abdulkadir.order.enums.OrderStatus;
-import com.abdulkadir.order.enums.PaymentStatus;
+import com.abdulkadir.order.model.enums.OrderStatus;
+import com.abdulkadir.order.model.enums.PaymentStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;

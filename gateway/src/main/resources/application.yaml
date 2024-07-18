@@ -1,6 +1,8 @@
 spring:
   application:
     name: gateway
+  main:
+    allow-bean-definition-overriding: true
 
   cloud:
     gateway:
@@ -13,22 +15,39 @@ spring:
           uri: lb://user
           predicates:
             - Path=/user/**
-        - id: package_route
-          uri: lb://package
-          predicates:
-            - Path=/package/**
+          filters:
+            - StripPrefix=1
+
         - id: payment_route
           uri: lb://payment
           predicates:
             - Path=/payment/**
+          filters:
+            - StripPrefix=1
+
         - id: advert_route
           uri: lb://advert
           predicates:
             - Path=/advert/**
+          filters:
+            - StripPrefix=1
+
         - id: order_route
           uri: lb://order
           predicates:
             - Path=/order/**
+          filters:
+            - StripPrefix=1
+
+        - id: auth_route
+          uri: lb://auth
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+
+jwt:
+  secret: rrxyPsPejUO9swnopDq3pxZigUA3eDA47fkYcuzB9I4=
 
 eureka:
   client:
@@ -39,3 +58,9 @@ eureka:
 
 server:
   port: 8080
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.cloud.gateway: DEBUG

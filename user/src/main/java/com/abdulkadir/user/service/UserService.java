@@ -9,6 +9,7 @@ import com.abdulkadir.user.model.User;
 import com.abdulkadir.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,10 @@ public class UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+
+
+
+
 
     public List<UserResponseDTO> getAllUsers() {
         return userRepository
@@ -38,19 +43,6 @@ public class UserService {
         return userRepository.existsById(id);
     }
 
-
-
-    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
-        // Assuming email is the unique identifier. Adjust according to your user model.
-        String email = userRequestDTO.getEmail();
-        boolean userExists = userRepository.findByEmail(email).isPresent();
-
-        if (userExists) {
-            throw new EntityAlreadyExistsException("User already exists with email: " + email);
-        }
-
-        return userMapper.toUserResponseDTO(userRepository.save(userMapper.toUser(userRequestDTO)));
-    }
 
     public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
         return userRepository.findById(id).map(user -> {

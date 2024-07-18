@@ -6,16 +6,19 @@ import com.abdulkadir.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+
 
     @GetMapping
     public List<UserResponseDTO> getAllUsers() {
@@ -33,10 +36,6 @@ public class UserController {
     }
 
 
-    @PostMapping
-    public UserResponseDTO createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
-        return userService.createUser(userRequestDTO);
-    }
     @PutMapping("/{id}")
     public UserResponseDTO updateUser(@PathVariable Long id, @RequestBody @Valid UserRequestDTO userRequestDTO) {
         return userService.updateUser(id, userRequestDTO);

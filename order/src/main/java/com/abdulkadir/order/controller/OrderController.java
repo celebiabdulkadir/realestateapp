@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
+@RequestMapping("/order")
 public class OrderController {
 
     @Autowired

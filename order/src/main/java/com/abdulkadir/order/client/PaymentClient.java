@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(value = "payment", url = "localhost:8084")
+@FeignClient(value = "payment", url = "localhost:8084/payment")
 public interface PaymentClient {
-    @PostMapping("/")
+    @PostMapping()
     ResponseEntity<PaymentClientResponseDTO> pay(@RequestBody PaymentClientRequestDTO paymentClientRequestDTO);
 }

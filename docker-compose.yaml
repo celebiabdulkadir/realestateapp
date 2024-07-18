@@ -64,12 +64,24 @@ services:
       environment:
         RABBITMQ_DEFAULT_USER: admin
         RABBITMQ_DEFAULT_PASS: 123456
+    rabbitmq-order:
+      container_name: rabbitmq-order
+      image: rabbitmq:3-management
+      ports:
+        - "5673:5672"
+        - "15673:15672"
+      networks:
+        - realestate
+      environment:
+        RABBITMQ_DEFAULT_USER: admin
+        RABBITMQ_DEFAULT_PASS: 123456
 volumes:
   userdb:
   advert:
   orderdb:
   paymentdb:
   rabbitmq-advert:
+  rabbitmq-order:
 
 networks:
   realestate:

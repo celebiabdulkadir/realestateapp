@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
+@RequestMapping("/advert")
 public class AdvertController {
 
     @Autowired

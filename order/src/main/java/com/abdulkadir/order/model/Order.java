@@ -1,7 +1,7 @@
 package com.abdulkadir.order.model;
 
-import com.abdulkadir.order.enums.OrderStatus;
-import com.abdulkadir.order.enums.PaymentStatus;
+import com.abdulkadir.order.model.enums.OrderStatus;
+import com.abdulkadir.order.model.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

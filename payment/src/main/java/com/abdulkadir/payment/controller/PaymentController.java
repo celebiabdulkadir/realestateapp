@@ -14,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
+@RequestMapping("/payment")
 public class PaymentController {
 
     @Autowired
