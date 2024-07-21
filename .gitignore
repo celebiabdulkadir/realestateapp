@@ -12,6 +12,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.env
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
