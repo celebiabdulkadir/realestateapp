@@ -1,22 +1,29 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Avatar, Button, Layout, Popover, theme } from "antd";
 import Link from "next/link";
 import Image from "next/image";
 import { UserOutlined } from "@ant-design/icons";
 import { deleteCookie } from "@/app/lib/actions";
+import { useRouter } from "next/navigation";
+import { getTokenFromCookie } from "@/utils";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
-const Header = ({ token }: { token: any }) => {
+const Header = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [popoverVisible, setPopoverVisible] = React.useState(false);
-  const logoutUser = () => {
-    deleteCookie("token");
+
+  const logoutUser = async () => {
+    await signOut();
     // Do something
   };
+
   const content = (
     <div className="flex flex-col w-full">
-      <span></span>
       <Link href={"/profile"} className="text-left" type="text">
         Profile
       </Link>
@@ -46,7 +53,7 @@ const Header = ({ token }: { token: any }) => {
       </Link>
       <div className="flex gap-2 items-center mr-4">
         <>
-          {!token ? (
+          {!session ? (
             <Button type="primary" className="text-left">
               <Link href={"/login"}>Login</Link>
             </Button>

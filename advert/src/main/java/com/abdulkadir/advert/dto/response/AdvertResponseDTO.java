@@ -6,6 +6,7 @@ import com.abdulkadir.advert.model.enums.Heating;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Getter

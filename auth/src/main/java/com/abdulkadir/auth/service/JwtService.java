@@ -1,11 +1,18 @@
 package com.abdulkadir.auth.service;
 
+import com.abdulkadir.auth.dto.response.AuthResponseDTO;
+import com.abdulkadir.auth.exception.EntityNotFoundException;
+import com.abdulkadir.auth.exception.TokenValidationException;
+import com.abdulkadir.auth.model.Auth;
+import com.abdulkadir.auth.repository.AuthRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -17,12 +24,20 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+    @Autowired
+    private  AuthRepository repository;
+
     @Value("${jwt.secret}")
     private String SECRET;
 
-    public String generateToken(String username) {
+    public AuthResponseDTO generateToken(String username) {
+
+        Auth user = repository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        String token = createToken(claims, username);
+        return new AuthResponseDTO(username, user.getEmail(), user.getName(), user.getSurname(), token, user.getId().toString());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
@@ -48,12 +63,14 @@ public class JwtService {
                 .getBody();
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) throws TokenValidationException {
         try {
             extractClaims(token); // If this does not throw an exception, the token is valid
             return true;
-        } catch (Exception e) {
-            return false;
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            throw new TokenValidationException("Expired JWT token", HttpStatus.UNAUTHORIZED);
+        } catch (io.jsonwebtoken.JwtException | IllegalArgumentException e) {
+            throw new TokenValidationException("Invalid JWT token", HttpStatus.UNAUTHORIZED);
         }
     }
 

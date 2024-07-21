@@ -1,27 +1,31 @@
-export const signIn = async (formData: FormData) => {
-  const payload: { [key: string]: FormDataEntryValue } = {};
+import { setCookievalue } from "@/app/lib/actions";
 
-  for (const [key, value] of formData.entries()) {
-    if (key === "email") {
-      payload["username"] = value;
-    } else if (key === "password") {
-      payload[key] = value;
-    }
-  }
+interface Inputs {
+  username: string;
+  password: string;
+}
 
-  console.log(payload);
+export const signIn = async (credentials: Inputs) => {
+  try {
+    const payload = {
+      username: credentials.username,
+      password: credentials.password,
+    };
 
-  const res = await fetch("http://localhost:8080/auth/auth/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+    console.log("payload", payload);
 
-  if (res.ok) {
-    return await res.text();
-  } else {
-    throw await res.json();
+    const res = await fetch("http://localhost:8080/auth/auth/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    console.log("res", res);
+
+    return res;
+  } catch (error) {
+    console.log("Error in signIn function:", error);
   }
 };

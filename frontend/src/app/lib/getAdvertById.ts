@@ -1,8 +1,11 @@
-import { cookies } from "next/headers";
-
-export const getAllAdverts = async () => {
+export const getAdvertById = async (id: string) => {
   try {
-    const res = await fetch("http://localhost:8080/advert/advert", {
+    if (!id) {
+      throw new Error("Id is required.");
+      return;
+    }
+    console.log("id", id);
+    const res = await fetch(`http://localhost:8080/advert/advert/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

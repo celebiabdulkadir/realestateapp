@@ -17,9 +17,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,7 +56,6 @@ public class AdvertService {
     }
 
 
-
     public AdvertResponseDTO create(AdvertRequestDTO advertRequestDTO) {
         // Check if the user exists.
         if (!userClient.existsById(advertRequestDTO.getUserId())) {
@@ -79,6 +76,8 @@ public class AdvertService {
 
         // Save the advert entity.
         Advert savedAdvert = advertRepository.save(advertMapper.toAdvert(advertRequestDTO));
+
+        // New code to save images
 
         // Send the status change message after saving the advert.
         // Assuming the status change is related to the creation of the advert,

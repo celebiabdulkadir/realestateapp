@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const currentUser = request.cookies.get("token")?.value;
+  const currentUser = request.cookies.get("user")?.value;
 
   if (currentUser && !request.nextUrl.pathname.startsWith("/")) {
     return Response.redirect(new URL("/dashboard", request.url));

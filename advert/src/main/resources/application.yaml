@@ -12,6 +12,10 @@ spring:
 
   application:
     name: advert
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 
   jpa:
@@ -44,4 +48,12 @@ status:
   queue: advertStatusQueue
   exchange: advert-exchange
   routingKey: advert.status.#
+
+aws:
+  accessKeyId: AKIAW3MEB4Y6KVHH5V3J
+  secretKey: 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
+  region: us-east-1
+  bucketName: realestate-image-bucket
+
+
 

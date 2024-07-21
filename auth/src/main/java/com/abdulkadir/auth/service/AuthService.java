@@ -1,6 +1,7 @@
 package com.abdulkadir.auth.service;
 
 import com.abdulkadir.auth.dto.request.UserCreateDTO;
+import com.abdulkadir.auth.dto.response.AuthResponseDTO;
 import com.abdulkadir.auth.exception.EntityAlreadyExistsException;
 import com.abdulkadir.auth.repository.AuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class AuthService {
         return "User created successfully!";
     }
 
-    public String generateToken(String username) {
+    public AuthResponseDTO generateToken(String username) {
         return jwtService.generateToken(username);
     }
 

@@ -4,6 +4,7 @@ package com.abdulkadir.auth.exception;
 import com.abdulkadir.auth.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -53,6 +54,19 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 System.currentTimeMillis());
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(TokenValidationException.class)
+    public ResponseEntity<String> handleTokenValidationException(TokenValidationException ex) {
+        return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Invalid credentials provided.",
+                System.currentTimeMillis());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 }
 

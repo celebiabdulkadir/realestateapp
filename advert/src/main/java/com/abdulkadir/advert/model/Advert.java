@@ -1,7 +1,6 @@
 package com.abdulkadir.advert.model;
 
-import com.abdulkadir.advert.config.JpaAuditingConfig;
-import com.abdulkadir.advert.model.converters.AdvertTypeConverter;
+
 import com.abdulkadir.advert.model.enums.AdvertStatus;
 import com.abdulkadir.advert.model.enums.AdvertType;
 import com.abdulkadir.advert.model.enums.Heating;
@@ -12,10 +11,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name = "/advert/")
+@Table(name = "advert")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -54,11 +55,11 @@ public class Advert {
     private Number totalFloor;
 
     @Column(name = "heating")
+    @Enumerated(EnumType.STRING)
     private Heating heating;
 
     @Column(name = "balcony")
     private Boolean balcony;
-
 
     @Column(name = "elevator")
     private Boolean elevator;
@@ -78,8 +79,10 @@ public class Advert {
     @Column(name = "swap")
     private Boolean swap;
 
+
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "advert_type") // For Sale or For Rent
+    @Column(name = "advert_type")
     private AdvertType advertType;
 
     @CreatedDate
@@ -90,10 +93,11 @@ public class Advert {
     @Column(name = "update_date", insertable = false)
     private LocalDateTime updateDate;
 
-    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "advert_status")
     private AdvertStatus advertStatus = AdvertStatus.IN_REVIEW;
+
+
 
     @PrePersist
     protected void onCreate() {
