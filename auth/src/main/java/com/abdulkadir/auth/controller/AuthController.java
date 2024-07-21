@@ -31,7 +31,7 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/token")
-    public ResponseEntity<AuthResponseDTO> generateToken(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<AuthResponseDTO> generateToken(@RequestBody @Valid AuthRequest authRequest) {
         logger.info("Starting token generation for user: {}", authRequest.getUsername());
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));

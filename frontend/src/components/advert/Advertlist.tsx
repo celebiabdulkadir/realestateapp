@@ -47,19 +47,10 @@ const AdvertList: FC<AdvertListProps> = ({ adverts }) => {
     <div className="flex flex-col w-full  h-full">
       <div className="h-full w-full flex flex-wrap gap-4 ">
         {currentAdverts.map((advert: Advert) => (
-          <AdvertCard
-            advert={advert}
-            key={advert.id}
-            onDelete={() => {
-              console.log("delete");
-            }}
-            onEdit={() => {
-              console.log("edit");
-            }}
-          />
+          <AdvertCard advert={advert} key={advert.id} />
         ))}
       </div>
-      <div className="h-full">
+      <div className="h-full w-full">
         <Pagination
           defaultCurrent={1}
           total={adverts.length}

@@ -1,6 +1,7 @@
 package com.abdulkadir.order.repository;
 
 import com.abdulkadir.order.model.Order;
+import com.abdulkadir.order.model.enums.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    Optional<Order> findByUserId(Number userId);
-    List<Order> findByUserIdAndExpiryDateAfter(Long userId, LocalDateTime now);
+    List<Order> findByUserId(Number userId);
+    List<Order> findByUserIdAndExpiryDateAfterAndOrderStatus(Long userId, LocalDateTime now, OrderStatus orderStatus);
 
 
 }

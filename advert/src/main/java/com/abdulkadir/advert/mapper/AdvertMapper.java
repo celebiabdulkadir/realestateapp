@@ -77,6 +77,7 @@ public class AdvertMapper {
         existingAdvert.setCredit(advertRequestDTO.getCredit());
         existingAdvert.setSwap(advertRequestDTO.getSwap());
         existingAdvert.setAdvertType(advertRequestDTO.getAdvertType());
+        existingAdvert.setAdvertStatus(advertRequestDTO.getAdvertStatus());
         // Note: The advert status is not updated as per the original method's comment
         return existingAdvert;
     }

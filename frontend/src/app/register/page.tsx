@@ -8,10 +8,11 @@ import { setCookievalue } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
 
 import * as yup from "yup";
-import { register } from "@/auth/Register";
+import { register } from "@/auth/register";
 import { TruckFilled } from "@ant-design/icons";
+import { enqueueSnackbar } from "notistack";
 
-interface FormValues {
+interface RegisterFormValues {
   name: string;
   surname: string;
   email: string;
@@ -52,23 +53,36 @@ export default function Page() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<RegisterFormValues>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (formData: FormValues) => {
+  const onSubmit = async (formData: RegisterFormValues) => {
     try {
-      ("use server");
-      const response = await register(formData);
-
-      const token = await response.text();
-
+      const response = (await register(formData)) as Response;
+      console.log("response", response);
       if (response.status === 200) {
-        setCookievalue("token", token);
-        router.push("/");
-        console.log("Login success");
+        enqueueSnackbar("Register success", { variant: "success" });
+        router.push("/login");
+      } else if (response.status === 400) {
+        enqueueSnackbar("Bad request", { variant: "error" });
+      } else if (response.status === 409) {
+        enqueueSnackbar("User already exists", { variant: "error" });
+      } else {
+        enqueueSnackbar("Register failed", { variant: "error" });
       }
-    } catch (error) {}
+    } catch (error: any) {
+      if (error.status === 409) {
+        console.log("error", error.status);
+        enqueueSnackbar("User already exists", { variant: "error" });
+      } else {
+        enqueueSnackbar("Register failed", { variant: "error" });
+      }
+
+      if (error.status === 400) {
+        enqueueSnackbar("Bad request", { variant: "error" });
+      }
+    }
   };
 
   return (
@@ -190,7 +204,7 @@ export default function Page() {
                     help={errors.address?.message}
                     validateStatus={errors.address ? "error" : ""}
                   >
-                    <InputNumber
+                    <Input
                       className="w-full"
                       addonBefore={<TruckFilled />}
                       placeholder={"Address"}

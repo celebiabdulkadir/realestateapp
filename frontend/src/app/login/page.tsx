@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 
 import * as yup from "yup";
 import Loading from "../loading";
+import { enqueueSnackbar } from "notistack";
 
 interface FormValues {
   username: string;
@@ -44,8 +45,13 @@ export default function Page() {
 
       if (res?.ok) {
         router.push("/");
-      } else {
-        alert("Login failed");
+        enqueueSnackbar("Login successful", { variant: "success" });
+      } else if (res?.status === 401) {
+        enqueueSnackbar("Username or password is wrong", { variant: "error" });
+      } else if (res?.status === 500) {
+        enqueueSnackbar("Server error", { variant: "error" });
+      } else if (res?.status === 400) {
+        enqueueSnackbar("Bad request", { variant: "error" });
       }
     } catch (error) {
       console.log(error);

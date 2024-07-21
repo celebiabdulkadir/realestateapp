@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Valid
+@Data
 public class UserCreateDTO {
 
     @NotNull(message = "Name cannot be null")

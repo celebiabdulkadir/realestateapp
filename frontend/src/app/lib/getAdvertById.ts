@@ -7,6 +7,7 @@ export const getAdvertById = async (id: string) => {
     console.log("id", id);
     const res = await fetch(`http://localhost:8080/advert/advert/${id}`, {
       method: "GET",
+      cache: "no-store",
       headers: {
         "Content-Type": "application/json",
       },

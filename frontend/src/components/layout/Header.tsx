@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { getTokenFromCookie } from "@/utils";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import { enqueueSnackbar } from "notistack";
 
 const Header = () => {
   const { data: session, status } = useSession();
@@ -19,19 +20,17 @@ const Header = () => {
 
   const logoutUser = async () => {
     await signOut();
+    enqueueSnackbar("Logout successful", { variant: "success" });
     // Do something
   };
 
   const content = (
     <div className="flex flex-col w-full">
-      <Link href={"/profile"} className="text-left" type="text">
-        Profile
-      </Link>
-
-      <Link href={"/packages"} onClick={logoutUser} type="text">
+      <Link href={"/packages"} type="text">
         My Packages
       </Link>
-      <Link href={"/"} onClick={logoutUser} type="text">
+
+      <Link href={"/login"} type="text">
         Logout
       </Link>
     </div>
@@ -51,31 +50,43 @@ const Header = () => {
       <Link href={"/"} className="text-left" type="text">
         <Image src="/house.png" alt="logo" width={40} height={20} />
       </Link>
-      <div className="flex gap-2 items-center mr-4">
+      <div className="flex gap-2 items-center mr-4  ">
         <>
           {!session ? (
-            <Button type="primary" className="text-left">
+            <Button type="primary" className="text-left ">
               <Link href={"/login"}>Login</Link>
             </Button>
           ) : (
             <>
-              <Popover
-                className="merzigo-popover"
-                content={content}
-                trigger="click"
-                open={popoverVisible}
-                onOpenChange={setPopoverVisible}
-              >
-                <Avatar
-                  className="cursor-pointer"
-                  // size="small"
-                  icon={<UserOutlined />}
-                />
-              </Popover>
+              <div className="block sm:hidden">
+                <Popover
+                  content={content}
+                  trigger="click"
+                  open={popoverVisible}
+                  onOpenChange={setPopoverVisible}
+                >
+                  <Avatar
+                    className="cursor-pointer"
+                    // size="small"
+                    icon={<UserOutlined />}
+                  />
+                </Popover>
+              </div>
 
-              <Button onClick={logoutUser} type="primary" className="text-left">
-                <Link href={"/"}>Logout</Link>
-              </Button>
+              <div className="hidden sm:block">
+                <Button type="primary" className="text-left  ">
+                  <Link href={"/packages"}>Packages</Link>
+                </Button>
+              </div>
+              <div className="hidden sm:block">
+                <Button
+                  onClick={logoutUser}
+                  type="primary"
+                  className="text-left hidden sm:block"
+                >
+                  <Link href={"/"}>Logout</Link>
+                </Button>
+              </div>
             </>
           )}
         </>

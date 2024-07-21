@@ -49,6 +49,13 @@ public class OrderService {
                 .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + id));
     }
 
+    public List<OrderResponseDTO> getOrderByUserId(Long userId) {
+        return orderRepository.findByUserId(userId)
+                .stream()
+                .map(orderMapper::toOrderResponseDTO)
+                .collect(Collectors.toList());
+    }
+
     public OrderResponseDTO create(OrderRequestDTO orderRequestDTO) {
 
         if(userClient.existsById(orderRequestDTO.getUserId()) == null) {
@@ -98,7 +105,7 @@ public class OrderService {
     }
 
     public long getAvailableAdvertRights(Long userId) {
-        List<Order> validOrders = orderRepository.findByUserIdAndExpiryDateAfter(userId, LocalDateTime.now());
+        List<Order> validOrders = orderRepository.findByUserIdAndExpiryDateAfterAndOrderStatus(userId, LocalDateTime.now(), OrderStatus.DELIVERED);
         long totalAdvertRights = validOrders.stream()
                 .mapToInt(Order::getAdvertCount)
                 .sum();
@@ -113,7 +120,7 @@ public class OrderService {
     }
 
     public void decrementAdvertRights(Long userId) {
-        List<Order> validOrders = orderRepository.findByUserIdAndExpiryDateAfter(userId, LocalDateTime.now())
+        List<Order> validOrders = orderRepository.findByUserIdAndExpiryDateAfterAndOrderStatus(userId, LocalDateTime.now(),OrderStatus.DELIVERED)
                 .stream()
                 .sorted(Comparator.comparing(Order::getExpiryDate))
                 .toList();

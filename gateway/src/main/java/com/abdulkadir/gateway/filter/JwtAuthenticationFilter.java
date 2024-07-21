@@ -39,12 +39,15 @@ public class JwtAuthenticationFilter implements WebFilter {
         String path = request.getURI().getPath();
         HttpMethod method = request.getMethod();
 
-        // Bypass JWT validation for GET requests to /advert and /advert/{id}
-        // Check if the request is a GET request and if the path matches the criteria
-        if (HttpMethod.GET.equals(method) && (path.matches("/advert(/.*)?"))) {
+        // Bypass JWT validation for OPTIONS requests
+        if (HttpMethod.OPTIONS.equals(method)) {
             return chain.filter(exchange);
         }
 
+        // Existing code for bypassing GET requests to /advert and /advert/{id}
+        if (HttpMethod.GET.equals(method) && (path.matches("/advert(/.*)?"))) {
+            return chain.filter(exchange);
+        }
         logger.info("Entering JwtAuthenticationFilter");
         if (routeValidator.isSecured.test(request)) {
             String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);

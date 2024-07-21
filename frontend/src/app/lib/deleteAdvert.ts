@@ -1,16 +1,19 @@
-import { cookies } from "next/headers";
-
-export const getAllAdverts = async () => {
+export const deleteAdvertById = async (id: string, token: string) => {
   try {
-    const res = await fetch("http://localhost:8080/advert/advert", {
-      method: "GET",
-      cache: "no-store",
+    if (!id) {
+      throw new Error("Id is required.");
+      return;
+    }
+    console.log("id", id);
+    const res = await fetch(`http://localhost:8080/advert/advert/${id}`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        AUTHORIZATION: `Bearer ${token}`,
       },
     });
 
-    console.log("res", res);
+    console.log("delete res", res);
 
     return res;
   } catch (error) {

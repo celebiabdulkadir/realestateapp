@@ -6,6 +6,7 @@ import com.abdulkadir.advert.service.AdvertService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,5 +40,10 @@ public class AdvertController {
     @PutMapping("/{id}")
     public AdvertResponseDTO update(@PathVariable Long id, @RequestBody @Valid AdvertRequestDTO advertRequestDTO) {
         return advertService.update(id, advertRequestDTO);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        advertService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

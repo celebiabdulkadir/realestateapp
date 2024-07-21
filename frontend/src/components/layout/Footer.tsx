@@ -16,7 +16,7 @@ const Footer = () => {
         {/* eslint-disable react/jsx-no-target-blank */}
         <a
           className="!text-primary font-bold md:text-lg"
-          href="https://keynetworksgroup.com/"
+          href="https://www.fmss.com.tr/tr"
           target="_blank"
         >
           Real Estate

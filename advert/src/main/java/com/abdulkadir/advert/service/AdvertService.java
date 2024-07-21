@@ -50,6 +50,13 @@ public class AdvertService {
         );
     }
 
+    public void delete(Long id) {
+        if (!advertRepository.existsById(id)) {
+            throw new EntityNotFoundException("Advert not found with id: " + id);
+        }
+        advertRepository.deleteById(id);
+    }
+
     public long getAllByUserId(Long userId) {
 
         return advertRepository.findByUserId(userId).stream().count();

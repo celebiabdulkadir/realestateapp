@@ -33,6 +33,11 @@ public class OrderController {
         return orderService.getAvailableAdvertRights(userId);
     }
 
+    @GetMapping("/orderByUserId/{id}")
+    public List<OrderResponseDTO> getOrderByUserId(@PathVariable("id") Long userId) {
+        return orderService.getOrderByUserId(userId);
+    }
+
     @PostMapping
     public OrderResponseDTO create(@RequestBody @Valid OrderRequestDTO orderRequestDTO) {
         return orderService.create(orderRequestDTO);
