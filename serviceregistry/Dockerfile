@@ -1,12 +1,10 @@
-# First stage: Build the application with Eclipse Temurin and Maven
-FROM eclipse-temurin:21 as build
-RUN apt-get update && apt-get install -y maven
-COPY . /app
-WORKDIR /app
-RUN mvn clean package -DskipTests
+#Start with a base image containing Java runtime
+FROM openjdk:21-jdk-slim
 
-# Second stage: Run the application with JDK 21
-FROM eclipse-temurin:21-jre
-COPY --from=build /app/target/*.jar /usr/app/serviceregistry.jar
-WORKDIR /usr/app
-ENTRYPOINT ["java", "-jar", "serviceregistry.jar"]
+RUN apt-get update && apt-get install
+
+# Add the application's jar to the image
+COPY target/serviceregistry-0.0.1-SNAPSHOT.jar serviceregistry-0.0.1-SNAPSHOT.jar
+
+# execute the application
+ENTRYPOINT ["java", "-jar", "serviceregistry-0.0.1-SNAPSHOT.jar"]
