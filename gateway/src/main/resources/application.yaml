@@ -14,12 +14,12 @@ spring:
         corsConfigurations:
           '[/**]':
             allowedOrigins:
-              - "http://localhost:3000"
+              - "*"
             allowedMethods:
               - GET
               - POST
               - PUT
-              - DELETE
+              - DELETEdocker
               - OPTIONS
             allowedHeaders:
               - authorization

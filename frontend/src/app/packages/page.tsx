@@ -3,7 +3,7 @@ import { getOrdersByUserId } from "@/app/lib/getOrdersByUserId";
 import { getAvailableAdvertRight } from "@/app/lib/getAvailableAdvertRights";
 import { getServerSession } from "next-auth";
 import { CustomUser } from "@/interfaces";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../api/auth/[...nextauth]/authOptions";
 import { signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
 import PackagePurchaseButton from "@/components/packages/PackagePurchaseButton";

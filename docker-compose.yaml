@@ -9,9 +9,12 @@ services:
       ports:
         - "8082:8082"
       depends_on:
-        - advertdb
-        - rabbitmq-advert
-        - serviceregistry
+        advertdb:
+            condition: service_started
+        rabbitmq-advert:
+          condition: service_started
+        serviceregistry:
+          condition: service_started
       environment:
         SPRING_DATASOURCE_URL: jdbc:postgresql://advertdb:5432/advertdb
         SPRING_RABBITMQ_HOST: rabbitmq-advert
@@ -27,8 +30,10 @@ services:
       ports:
         - "8085:8085"
       depends_on:
-        - userdb
-        - serviceregistry
+        userdb:
+          condition: service_started
+        serviceregistry:
+          condition: service_started
       environment:
         SPRING_DATASOURCE_URL: jdbc:postgresql://userdb:5432/userdb
         EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
@@ -43,9 +48,16 @@ services:
       ports:
         - "8080:8080"
       depends_on:
-        - serviceregistry
+        serviceregistry:
+          condition: service_started
       environment:
         EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
+        SSPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__ALLOWEDORIGINS: "*"
+        SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__ALLOWEDMETHODS: "GET,POST,PUT,DELETE,OPTIONS"
+        SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__ALLOWEDHEADERS: "authorization,content-type,x-auth-token"
+        SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__EXPOSEDHEADERS: "x-auth-token"
+
+
       networks:
         - realestate
 
@@ -57,12 +69,16 @@ services:
       ports:
         - "8083:8083"
       depends_on:
-        - orderdb
-        - serviceregistry
+        orderdb:
+          condition: service_started
+        serviceregistry:
+          condition: service_started
+        rabbitmq-order:
+          condition: service_started
       environment:
         SPRING_DATASOURCE_URL: jdbc:postgresql://orderdb:5432/orderdb
         EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
-        SPRING_RABBITMQ_HOST: rabbitmq-advert
+        SPRING_RABBITMQ_HOST: rabbitmq-order
       networks:
         - realestate
 
@@ -74,8 +90,10 @@ services:
       ports:
         - "8084:8084"
       depends_on:
-        - paymentdb
-        - serviceregistry
+        paymentdb:
+          condition: service_started
+        serviceregistry:
+            condition: service_started
       environment:
         SPRING_DATASOURCE_URL: jdbc:postgresql://paymentdb:5432/paymentdb
         EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
@@ -89,9 +107,6 @@ services:
       container_name: serviceregistry
       ports:
         - "8761:8761"
-      environment:
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
-        EUREKA_INSTANCE_HOSTNAME: serviceregistry
       networks:
         - realestate
 
@@ -103,8 +118,10 @@ services:
       ports:
         - "8081:8081"
       depends_on:
-        - userdb
-        - serviceregistry
+        userdb:
+          condition: service_started
+        serviceregistry:
+          condition: service_started
       environment:
         SPRING_DATASOURCE_URL: jdbc:postgresql://userdb:5432/userdb
         EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
@@ -185,6 +202,8 @@ services:
       environment:
         RABBITMQ_DEFAULT_USER: admin
         RABBITMQ_DEFAULT_PASS: 123456
+
+
 volumes:
   userdb:
   advertdb:
@@ -192,6 +211,13 @@ volumes:
   paymentdb:
   rabbitmq-advert:
   rabbitmq-order:
+  advert:
+  auth:
+  gateway:
+  order:
+  payment:
+  serviceregistry:
+
 
 networks:
   realestate:

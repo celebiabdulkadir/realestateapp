@@ -26,24 +26,22 @@ export const createAdvert = async (formData: FormValues, token: string) => {
       throw new Error("Id is required.");
     }
     const res = await fetch(`http://localhost:8080/advert/advert`, {
-        method: "POST",
-        cache: "no-cache",
-        headers: {
-            "Content-Type": "application/json",
-            AUTHORIZATION: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
+      method: "POST",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json",
+        AUTHORIZATION: `Bearer ${token}`,
+      },
+      body: JSON.stringify(formData),
     });
 
     console.log("createadvertResponse", res.json());
     if (res.status === 401) {
-            // If the API returns 401, sign the user out
-            signOut({ callbackUrl: '/login' });
-        }
+      // If the API returns 401, sign the user out
+      signOut({ callbackUrl: "/login" });
+    }
     return res;
   } catch (error) {
-
-    
     console.error("Error in getAllAdverts function:", error);
 
     if (error) {

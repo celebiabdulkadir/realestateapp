@@ -5,12 +5,10 @@ spring:
     password: 123456
     driver-class-name: org.postgresql.Driver
   rabbitmq:
-    host: localhost
-    port: 5673
+    host: rabbitmq-order
+    port: 5672
     username: admin
     password: 123456
-
-
 
   jpa:
     hibernate:

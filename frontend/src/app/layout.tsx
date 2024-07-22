@@ -9,7 +9,7 @@ import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import Loading from "./loading";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { CustomSessionProvider } from "@/providers/CustomSessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
