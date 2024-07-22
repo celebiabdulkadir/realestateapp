@@ -114,8 +114,6 @@ export default function CreateAdvert({
         enqueueSnackbar("Unauthorized", {
           variant: "error",
         });
-
-        router.push("/login");
         await signOut();
       } else if (res.status === 404) {
         enqueueSnackbar("You dont have advert right to publish", {

@@ -29,7 +29,11 @@ interface Order {
 
 const Page = async () => {
   const session = await getServerSession(authOptions);
-  console.log("session", session);
+  console.log("session ın page", session);
+  if (!session || !session.user) {
+    console.log("No session found, redirecting to login");
+    return redirect("/login");
+  }
 
   try {
     const orders = await getOrdersByUserId(
@@ -37,11 +41,13 @@ const Page = async () => {
       (session?.user as CustomUser)?.token
     );
 
+    const jsonOrders = await orders.json();
+
     const availableRights = await getAvailableAdvertRight(
       (session?.user as CustomUser)?.userId?.toString(),
       (session?.user as CustomUser)?.token
     );
-
+    const jsonAvailableRights = await availableRights.text();
     if (orders.status === 401 || availableRights.status === 401) {
       console.log("Unauthorized");
       redirect("/login");
@@ -51,20 +57,20 @@ const Page = async () => {
       <div className="p-2 flex flex-col gap-2">
         <h1 className="text-center font-bold text-lg">My Packages</h1>
 
-        {availableRights && (
+        {jsonAvailableRights && (
           <div className="flex justify-between">
             <div>
               <h2 className="pr-6 ">
                 <span className="font-bold">Available Rights :</span>{" "}
-                <span>{availableRights}</span>
+                <span>{jsonAvailableRights}</span>
               </h2>
             </div>
             <PackagePurchaseButton />
           </div>
         )}
         <ul className="flex flex-wrap gap-2 ">
-          {Array.isArray(orders) &&
-            orders.map((order: Order) => (
+          {jsonOrders &&
+            jsonOrders.map((order: Order) => (
               <li className="border-2 rounded-md p-2 max-w-sm" key={order.id}>
                 <p>
                   Order Date:{" "}

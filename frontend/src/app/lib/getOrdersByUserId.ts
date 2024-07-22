@@ -22,8 +22,7 @@ export const getOrdersByUserId = async (id: string, token: string) => {
       throw new Error(`Error: ${res.status}`);
     }
 
-    const data = await res.json();
-    return data;
+    return res;
   } catch (error) {
     console.error("Error in getOrdersByUserId function:", error);
     throw error;

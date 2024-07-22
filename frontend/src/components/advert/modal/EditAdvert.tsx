@@ -156,7 +156,6 @@ export default function EditAdvert({
           variant: "success",
         });
       } else if (res.status === 401) {
-        router.push("/login");
         await signOut();
       } else if (res.status === 400) {
         enqueueSnackbar("Bad request", {

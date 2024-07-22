@@ -1,15 +1,19 @@
 "use client";
 
 import React from "react";
-import { Button, Tooltip, Popconfirm } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Button, Tooltip, Popconfirm, Tag } from "antd";
+import {
+  CheckCircleOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import Image from "next/legacy/image";
 import Link from "next/link";
 import { CustomUser } from "@/interfaces";
 import EditAdvert from "./modal/EditAdvert";
 import { deleteAdvertById } from "@/app/lib/deleteAdvert";
-import { get } from "http";
 import { getAllAdverts } from "@/app/lib/getAllAdverts";
 import { useRouter } from "next/navigation";
 
@@ -104,9 +108,26 @@ const AdvertCard: React.FC<AdvertCardProps> = ({ advert }) => {
       {session &&
       session.user &&
       (session.user as CustomUser).userId == advert.userId ? (
-        <div className="flex gap-2 justify-end">
+        <div className="flex gap-2 justify-end items-center">
+          {advert.advertStatus === "ACTIVE" && (
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              ACTIVE
+            </Tag>
+          )}
+          {advert.advertStatus === "PASSIVE" && (
+            <Tag icon={<ExclamationCircleOutlined />} color="warning">
+              PASSIVE
+            </Tag>
+          )}
+
+          {advert.advertStatus === "IN_REVIEW" && (
+            <Tag icon={<DeleteOutlined />} color="default">
+              IN_REVIEW
+            </Tag>
+          )}
           <Tooltip title="Delete">
             <Button
+              size="small"
               onClick={showPopconfirm}
               danger
               icon={<DeleteOutlined />}
@@ -115,6 +136,8 @@ const AdvertCard: React.FC<AdvertCardProps> = ({ advert }) => {
 
           <Tooltip title="Edit">
             <Button
+              type="primary"
+              size="small"
               icon={<EditOutlined />}
               onClick={openCreateAdvertModal}
             ></Button>

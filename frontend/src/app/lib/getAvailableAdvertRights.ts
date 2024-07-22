@@ -27,8 +27,7 @@ export const getAvailableAdvertRight = async (id: string, token: string) => {
       throw new Error("Unauthorized");
     }
 
-    const data = await res.json();
-    return data;
+    return res;
   } catch (error) {
     console.error("Error in getAvailableAdvertRight function:", error);
     throw error;

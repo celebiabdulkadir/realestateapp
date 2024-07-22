@@ -7,14 +7,8 @@ import { Controller, set, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import { createAdvert } from "@/app/lib/createAdvert";
 import Loading from "@/app/loading"; // Ensure you have a Loading component
 import { CustomUser } from "@/interfaces";
-import {
-  AreaChartOutlined,
-  MoneyCollectFilled,
-  TruckFilled,
-} from "@ant-design/icons";
 import { getOrdersByUserId } from "@/app/lib/getOrdersByUserId";
 import { enqueueSnackbar } from "notistack";
 import { buyPackage } from "@/app/lib/buyPackage";
@@ -71,7 +65,7 @@ export default function PurchasePackage({
     // Fetch package info here
     const res = await getAllPackages(token);
     const packages = await (res as Response).json();
-    setPackageInfo(packages[0]);
+    setPackageInfo(packages ? packages[0] : ({} as Package));
   };
   const {
     control,
@@ -113,7 +107,7 @@ export default function PurchasePackage({
           variant: "success",
         });
         router.push("/packages");
-        // await getOrdersByUserId(userId);
+        await getOrdersByUserId(String(userId), token);
       } else if (res.status === 400) {
         enqueueSnackbar("Bad request", {
           variant: "error",
@@ -122,8 +116,6 @@ export default function PurchasePackage({
         enqueueSnackbar("Unauthorized", {
           variant: "error",
         });
-
-        router.push("/login");
         await signOut();
       } else if (res.status === 404) {
         enqueueSnackbar("You dont have advert right to publish", {

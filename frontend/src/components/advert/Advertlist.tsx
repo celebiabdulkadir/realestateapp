@@ -1,12 +1,8 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
-import { Button, Card, Pagination } from "antd";
-import Meta from "antd/es/card/Meta";
-import Link from "next/link";
-import { getTokenFromCookie } from "@/utils";
+import { FC, useState } from "react";
+import { Pagination } from "antd";
 import AdvertCard from "./AdvertCard";
-import { set } from "react-hook-form";
 interface Advert {
   id: number;
   userId: number;
@@ -44,13 +40,13 @@ const AdvertList: FC<AdvertListProps> = ({ adverts }) => {
   const currentAdverts = adverts.slice(startIndex, endIndex);
 
   return (
-    <div className="flex flex-col w-full  h-full">
+    <div className="flex flex-col w-full  h-full gap-8">
       <div className="h-full w-full flex flex-wrap gap-4 ">
         {currentAdverts.map((advert: Advert) => (
           <AdvertCard advert={advert} key={advert.id} />
         ))}
       </div>
-      <div className="h-full w-full">
+      <div className="h-full w-full ">
         <Pagination
           defaultCurrent={1}
           total={adverts.length}

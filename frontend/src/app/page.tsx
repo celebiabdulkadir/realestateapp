@@ -5,15 +5,16 @@ import AdvertList from "@/components/advert/Advertlist";
 import CreateAdvertButton from "@/components/advert/CreateAdvertButton";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]/route";
+import { CustomUser } from "@/interfaces";
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  console.log("session", session);
+  const currentUser = session?.user as CustomUser;
   const res = await getAllAdverts();
   const adverts = await (res as Response).json();
   return (
-    <main className="flex min-h-screen flex-col   items-center gap-4  ">
-      <div className="py-4 flex justify-between w-full px-4">
-        <h1>Home page</h1>
+    <main className="flex min-h-screen flex-col   items-center gap-2  ">
+      <h1 className="font-bold text-center pt-4">Adverts</h1>
+      <div className="py-4 flex justify-end w-full px-4">
         <CreateAdvertButton />
       </div>
       <div className="h-full">

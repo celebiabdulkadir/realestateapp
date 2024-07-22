@@ -6,9 +6,7 @@ import { Avatar, Button, Layout, Popover, theme } from "antd";
 import Link from "next/link";
 import Image from "next/image";
 import { UserOutlined } from "@ant-design/icons";
-import { deleteCookie } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
-import { getTokenFromCookie } from "@/utils";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import { enqueueSnackbar } from "notistack";
@@ -21,8 +19,6 @@ const Header = () => {
   const logoutUser = async () => {
     await signOut();
     enqueueSnackbar("Logout successful", { variant: "success" });
-
-    // Do something
   };
 
   const content = (
@@ -36,7 +32,6 @@ const Header = () => {
       </Link>
     </div>
   );
-
   const {
     token: { colorBgContainer },
   } = theme.useToken();
