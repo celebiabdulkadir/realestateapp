@@ -1,17 +1,21 @@
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
   const currentUser = request.cookies.get("user")?.value;
 
-  if (currentUser && !request.nextUrl.pathname.startsWith("/")) {
-    return Response.redirect(new URL("/dashboard", request.url));
+  // Protect the /packages route
+  if (request.nextUrl.pathname.startsWith("/packages")) {
+    // If the user is not logged in, redirect to the login page
+    if (!currentUser) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
   }
 
-  if (!currentUser && !request.nextUrl.pathname.startsWith("/login")) {
-    return Response.redirect(new URL("/", request.url));
-  }
+  // Allow the request to proceed
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  matcher: ["/packages/:path*"], // Apply this middleware only to the /packages route
 };

@@ -31,7 +31,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
               <Layout className="overflow-y-auto min-h-dvh relative">
                 <AntdRegistry>
                   <Header />
-                  {children}
+                  <div className="min-h-screen">{children}</div>
                   <Footer />
                 </AntdRegistry>
               </Layout>

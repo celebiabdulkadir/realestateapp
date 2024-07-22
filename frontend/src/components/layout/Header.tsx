@@ -21,6 +21,7 @@ const Header = () => {
   const logoutUser = async () => {
     await signOut();
     enqueueSnackbar("Logout successful", { variant: "success" });
+
     // Do something
   };
 
@@ -53,8 +54,12 @@ const Header = () => {
       <div className="flex gap-2 items-center mr-4  ">
         <>
           {!session ? (
-            <Button type="primary" className="text-left ">
-              <Link href={"/login"}>Login</Link>
+            <Button
+              onClick={() => router.push("/login")}
+              type="primary"
+              className="text-left "
+            >
+              Login
             </Button>
           ) : (
             <>
@@ -74,8 +79,12 @@ const Header = () => {
               </div>
 
               <div className="hidden sm:block">
-                <Button type="primary" className="text-left  ">
-                  <Link href={"/packages"}>Packages</Link>
+                <Button
+                  onClick={() => router.push("/packages")}
+                  type="primary"
+                  className="text-left  "
+                >
+                  Packages
                 </Button>
               </div>
               <div className="hidden sm:block">
@@ -84,7 +93,7 @@ const Header = () => {
                   type="primary"
                   className="text-left hidden sm:block"
                 >
-                  <Link href={"/"}>Logout</Link>
+                  Logout
                 </Button>
               </div>
             </>
