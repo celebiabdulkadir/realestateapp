@@ -66,8 +66,6 @@ services:
       context: ./order
       dockerfile: Dockerfile
     container_name: order
-    volumes:
-      - ./init-orderdb.sql:/docker-entrypoint-initdb.d/init-orderdb.sql
     ports:
       - "8083:8083"
     depends_on:
