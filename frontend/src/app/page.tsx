@@ -6,7 +6,7 @@ import CreateAdvertButton from "@/components/advert/CreateAdvertButton";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]/authOptions";
 import { CustomUser } from "@/interfaces";
-import { debug } from "console";
+
 export default async function Home() {
   const session = await getServerSession(authOptions);
   const currentUser = session?.user as CustomUser;

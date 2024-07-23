@@ -150,8 +150,9 @@ export default function EditAdvert({
       )) as Response;
       if (res.status === 200) {
         handleOk();
-        router.push("/");
         await getAllAdverts();
+        router.push("/");
+
         enqueueSnackbar("Advert Updated !", {
           variant: "success",
         });

@@ -104,8 +104,8 @@ export default function CreateAdvert({
         enqueueSnackbar("Advert Created !", {
           variant: "success",
         });
-        router.push("/");
         await getAllAdverts();
+        router.push("/");
       } else if (res.status === 400) {
         enqueueSnackbar("Bad request", {
           variant: "error",

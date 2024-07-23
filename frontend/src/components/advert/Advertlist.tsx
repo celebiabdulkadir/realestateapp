@@ -34,7 +34,7 @@ interface AdvertListProps {
 const AdvertList: FC<AdvertListProps> = ({ adverts }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10); // or any other number you want
-
+  console.log(adverts);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentAdverts = adverts.slice(startIndex, endIndex);

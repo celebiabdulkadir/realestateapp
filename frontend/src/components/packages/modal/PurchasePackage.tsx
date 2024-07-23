@@ -13,6 +13,7 @@ import { getOrdersByUserId } from "@/app/lib/getOrdersByUserId";
 import { enqueueSnackbar } from "notistack";
 import { buyPackage } from "@/app/lib/buyPackage";
 import { getAllPackages } from "@/app/lib/getAllPackages";
+import { getAvailableAdvertRight } from "@/app/lib/getAvailableAdvertRights";
 
 interface FormValues {
   userId: number;
@@ -106,8 +107,10 @@ export default function PurchasePackage({
         enqueueSnackbar("Purchase Successfull !", {
           variant: "success",
         });
-        router.push("/packages");
+        await getAvailableAdvertRight(String(userId), token);
         await getOrdersByUserId(String(userId), token);
+
+        router.push("/packages");
       } else if (res.status === 400) {
         enqueueSnackbar("Bad request", {
           variant: "error",
