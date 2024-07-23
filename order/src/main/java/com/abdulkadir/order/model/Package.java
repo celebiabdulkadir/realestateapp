@@ -28,6 +28,14 @@ public class Package {
 
     @Column(name = "advert_quantity")
     private Number advertQuantity;
+    // Add constructor for DataLoader usage
+    public Package(String name, Double price, String description, Integer duration, Integer advertQuantity) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.duration = duration;
+        this.advertQuantity = advertQuantity;
+    }
 
 
 

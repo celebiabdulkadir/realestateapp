@@ -1,207 +1,209 @@
 version: '3.8'
 
 services:
-    advert:
-      build:
-        context: ./advert
-        dockerfile: Dockerfile
-      container_name: advert
-      ports:
-        - "8082:8082"
-      depends_on:
-        advertdb:
-            condition: service_started
-        rabbitmq-advert:
-          condition: service_started
-        serviceregistry:
-          condition: service_started
-      environment:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://advertdb:5432/advertdb
-        SPRING_RABBITMQ_HOST: rabbitmq-advert
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
-      networks:
-        - realestate
-
-    auth:
-      build:
-        context: ./auth
-        dockerfile: Dockerfile
-      container_name: auth
-      ports:
-        - "8085:8085"
-      depends_on:
-        userdb:
-          condition: service_started
-        serviceregistry:
-          condition: service_started
-      environment:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://userdb:5432/userdb
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
-      networks:
-        - realestate
-
-    gateway:
-      build:
-        context: ./gateway
-        dockerfile: Dockerfile
-      container_name: gateway
-      ports:
-        - "8080:8080"
-      depends_on:
-        serviceregistry:
-          condition: service_started
-      environment:
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
-        SSPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__ALLOWEDORIGINS: "*"
-        SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__ALLOWEDMETHODS: "GET,POST,PUT,DELETE,OPTIONS"
-        SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__ALLOWEDHEADERS: "authorization,content-type,x-auth-token"
-        SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__EXPOSEDHEADERS: "x-auth-token"
-
-
-      networks:
-        - realestate
-
-    order:
-      build:
-        context: ./order
-        dockerfile: Dockerfile
-      container_name: order
-      ports:
-        - "8083:8083"
-      depends_on:
-        orderdb:
-          condition: service_started
-        serviceregistry:
-          condition: service_started
-        rabbitmq-order:
-          condition: service_started
-      environment:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://orderdb:5432/orderdb
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
-        SPRING_RABBITMQ_HOST: rabbitmq-order
-      networks:
-        - realestate
-
-    payment:
-      build:
-        context: ./payment
-        dockerfile: Dockerfile
-      container_name: payment
-      ports:
-        - "8084:8084"
-      depends_on:
-        paymentdb:
-          condition: service_started
-        serviceregistry:
-            condition: service_started
-      environment:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://paymentdb:5432/paymentdb
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
-      networks:
-        - realestate
-
-    serviceregistry:
-      build:
-        context: ./serviceregistry
-        dockerfile: Dockerfile
-      container_name: serviceregistry
-      ports:
-        - "8761:8761"
-      networks:
-        - realestate
-
-    user:
-      build:
-        context: ./user
-        dockerfile: Dockerfile
-      container_name: user
-      ports:
-        - "8081:8081"
-      depends_on:
-        userdb:
-          condition: service_started
-        serviceregistry:
-          condition: service_started
-      environment:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://userdb:5432/userdb
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
-      networks:
-        - realestate
-
-    userdb:
-      container_name: userdb
-      image: postgres
-      ports:
-      - "5436:5432"
-      environment:
-        POSTGRES_USER: abdulkadir
-        POSTGRES_PASSWORD: 123456
-        POSTGRES_DB: userdb
-      volumes:
-      - userdb:/var/lib/postgresql/data
-      networks:
+  advert:
+    build:
+      context: ./advert
+      dockerfile: Dockerfile
+    container_name: advert
+    ports:
+      - "8082:8082"
+    depends_on:
+      advertdb:
+        condition: service_started
+      rabbitmq-advert:
+        condition: service_started
+      serviceregistry:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://advertdb:5432/advertdb
+      SPRING_RABBITMQ_HOST: rabbitmq-advert
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
+    networks:
       - realestate
-    advertdb:
-        container_name: advertdb
-        image: postgres
-        ports:
-        - "5437:5432"
-        environment:
-            POSTGRES_USER: abdulkadir
-            POSTGRES_PASSWORD: 123456
-            POSTGRES_DB: advertdb
-        volumes:
-        - advertdb:/var/lib/postgresql/data
-        networks:
-        - realestate
-    orderdb:
-        container_name: orderdb
-        image: postgres
-        ports:
-        - "5438:5432"
-        environment:
-          POSTGRES_USER: abdulkadir
-          POSTGRES_PASSWORD: 123456
-          POSTGRES_DB: orderdb
-        volumes:
-        - orderdb:/var/lib/postgresql/data
-        networks:
-        - realestate
-    paymentdb:
-        container_name: paymentdb
-        image: postgres
-        ports:
-        - "5439:5432"
-        environment:
-          POSTGRES_USER: abdulkadir
-          POSTGRES_PASSWORD: 123456
-          POSTGRES_DB: paymentdb
-        volumes:
-        - paymentdb:/var/lib/postgresql/data
-        networks:
-        - realestate
-    rabbitmq-advert:
-      container_name: rabbitmq-advert
-      image: rabbitmq:3-management
-      ports:
-        - "5672:5672"
-        - "15672:15672"
-      networks:
-        - realestate
-      environment:
-        RABBITMQ_DEFAULT_USER: admin
-        RABBITMQ_DEFAULT_PASS: 123456
-    rabbitmq-order:
-      container_name: rabbitmq-order
-      image: rabbitmq:3-management
-      ports:
-        - "5673:5672"
-        - "15673:15672"
-      networks:
-        - realestate
-      environment:
-        RABBITMQ_DEFAULT_USER: admin
-        RABBITMQ_DEFAULT_PASS: 123456
+
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    container_name: auth
+    ports:
+      - "8085:8085"
+    depends_on:
+      userdb:
+        condition: service_started
+      serviceregistry:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://userdb:5432/userdb
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
+    networks:
+      - realestate
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      serviceregistry:
+        condition: service_started
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
+      SSPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__ALLOWEDORIGINS: "*"
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__ALLOWEDMETHODS: "GET,POST,PUT,DELETE,OPTIONS"
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__ALLOWEDHEADERS: "authorization,content-type,x-auth-token"
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS__0__EXPOSEDHEADERS: "x-auth-token"
+
+
+    networks:
+      - realestate
+
+  order:
+    build:
+      context: ./order
+      dockerfile: Dockerfile
+    container_name: order
+    volumes:
+      - ./init-orderdb.sql:/docker-entrypoint-initdb.d/init-orderdb.sql
+    ports:
+      - "8083:8083"
+    depends_on:
+      orderdb:
+        condition: service_started
+      serviceregistry:
+        condition: service_started
+      rabbitmq-order:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://orderdb:5432/orderdb
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
+      SPRING_RABBITMQ_HOST: rabbitmq-order
+    networks:
+      - realestate
+
+  payment:
+    build:
+      context: ./payment
+      dockerfile: Dockerfile
+    container_name: payment
+    ports:
+      - "8084:8084"
+    depends_on:
+      paymentdb:
+        condition: service_started
+      serviceregistry:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://paymentdb:5432/paymentdb
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
+    networks:
+      - realestate
+
+  serviceregistry:
+    build:
+      context: ./serviceregistry
+      dockerfile: Dockerfile
+    container_name: serviceregistry
+    ports:
+      - "8761:8761"
+    networks:
+      - realestate
+
+  user:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    container_name: user
+    ports:
+      - "8081:8081"
+    depends_on:
+      userdb:
+        condition: service_started
+      serviceregistry:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://userdb:5432/userdb
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
+    networks:
+      - realestate
+
+  userdb:
+    container_name: userdb
+    image: postgres
+    ports:
+      - "5436:5432"
+    environment:
+      POSTGRES_USER: abdulkadir
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: userdb
+    volumes:
+      - userdb:/var/lib/postgresql/data
+    networks:
+      - realestate
+  advertdb:
+    container_name: advertdb
+    image: postgres
+    ports:
+      - "5437:5432"
+    environment:
+      POSTGRES_USER: abdulkadir
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: advertdb
+    volumes:
+      - advertdb:/var/lib/postgresql/data
+    networks:
+      - realestate
+  orderdb:
+    container_name: orderdb
+    image: postgres
+    ports:
+      - "5438:5432"
+    environment:
+      POSTGRES_USER: abdulkadir
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: orderdb
+    volumes:
+      - orderdb:/var/lib/postgresql/data
+    networks:
+      - realestate
+  paymentdb:
+    container_name: paymentdb
+    image: postgres
+    ports:
+      - "5439:5432"
+    environment:
+      POSTGRES_USER: abdulkadir
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: paymentdb
+    volumes:
+      - paymentdb:/var/lib/postgresql/data
+    networks:
+      - realestate
+  rabbitmq-advert:
+    container_name: rabbitmq-advert
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - realestate
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: 123456
+  rabbitmq-order:
+    container_name: rabbitmq-order
+    image: rabbitmq:3-management
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    networks:
+      - realestate
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: 123456
 
 
 volumes:
