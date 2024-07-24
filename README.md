@@ -43,7 +43,7 @@ The application leverages a microservices architecture, enhancing scalability an
 
 ### Technologies
 - **Backend**: Java with Spring Boot for microservices.
-- **Frontend**: React for the user interface.
+- **Frontend**: Next.js/Typescript for the user interface.
 - **Database**: PostgreSQL for data storage.
 - **Messaging**: RabbitMQ for asynchronous communication.
 - **Containerization**: Docker & Docker Compose for service orchestration.
